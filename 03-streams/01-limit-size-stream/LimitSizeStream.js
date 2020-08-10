@@ -9,7 +9,7 @@ class LimitSizeStream extends stream.Transform {
   }
 
   _transform(chunk, encoding, callback) {
-    let stringSize = parseInt (unescape(encodeURIComponent( chunk.toString ('utf8') ).length));
+    let stringSize = chunk.length;
     
     this.curLimit += stringSize;
 
