@@ -46,7 +46,8 @@ var checkRequest = function (req, res) {
 
   // Проверка пути
   const pathName = url.parse (req.url).pathname.slice (1); // console.log ('pathName = ' + pathName);
-  if (pathName.indexOf ('/') !== -1 || pathName.indexOf ('%/%') !== -1) {return 400;}
+  if (!!path.parse (pathName).dir) {return 400;}
+
 
   // Полный путь к файлу
   const filePath = path.normalize (path.join (__dirname, 'files', decodeURIComponent(pathName))); // console.log ('filepath = ' + filePath);
@@ -56,7 +57,7 @@ var checkRequest = function (req, res) {
     if (err || !stats.isFile ()) {return 500;}
   });
   
-  return filePath;  
+  return filePath;
 }
 
 module.exports = server;
