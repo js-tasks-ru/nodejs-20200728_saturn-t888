@@ -50,6 +50,7 @@ server.on('request', (req, res) => {
     res.statusCode = 413;
     res.end ('File is too big.');
     req.destroy ();
+    return;
   });
 
   req.pipe (limit).pipe (writeFile);

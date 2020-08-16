@@ -14,21 +14,26 @@ server.on('request', (req, res) => {
       res.statusCode = 400;
       res.end ('Bad request!');
       return;
-    case 405:
-      res.statusCode = 405;
-      res.end ('Method ' + req.method + ' is not allowed.');
-      return;
     case 404:
       res.statusCode = 404;
       res.end ('File does not exists.');
+      return;
+    case 405:
+      res.statusCode = 405;
+      res.end ('Method ' + req.method + ' is not allowed.');
       return;
     default:
       filePath = checkRequest (req); break;
   }
 
   fs.unlinkSync (filePath, (err) => {
-    res.statusCode = 500;
-    res.end ('Internal error');
+    if (err.code === 'ENOENT') {
+      res.statusCode = 404;
+      return res.end ('File not found.');
+    } else {
+      res.statusCode = 500;
+      res.end ('Internal error.');
+    }
   });
 
   res.statusCode = 200;

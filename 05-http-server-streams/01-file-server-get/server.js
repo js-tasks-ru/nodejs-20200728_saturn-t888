@@ -14,10 +14,6 @@ server.on('request', (req, res) => {
       res.statusCode = 400;
       res.end ('Bad request!');
       return;
-    case 404:
-      res.statusCode = 404;
-      res.end ('File not found.');
-      return;
     case 405:
       res.statusCode = 405;
       res.end ('Method ' + req.method + ' is not allowed.');
@@ -32,9 +28,15 @@ server.on('request', (req, res) => {
   // Чтение и отдача файла
   fsStream = fs.createReadStream (filePath);
   fsStream.on ('error', (err) => {
-    res.statusCode = 500;
-    res.end ('Internal error.');
-  })
+    if (err.code === 'ENOENT') {
+      res.statusCode = 404;
+      res.end ('File not found.');
+    } else {
+      res.statusCode = 500;
+      res.end ('Internal error.');
+    }
+  });
+
   fsStream.pipe (res);
 
 });
@@ -53,9 +55,6 @@ var checkRequest = function (req, res) {
 
   // Полный путь к файлу
   const filePath = path.normalize (path.join (__dirname, 'files', decodeURIComponent(pathName))); // console.log ('filepath = ' + filePath);
-  
-  // Проверка наличия файла
-  if (!fs.existsSync (filePath)) {return 404;}
   
   // Не удалось понять, почему эта проверка у меня не срабатывает...
   fs.stat (filePath, function (err, stats) {
