@@ -2,7 +2,6 @@ const url = require('url');
 const http = require('http');
 const path = require('path');
 const fs = require ('fs');
-// const { fstat, exists } = require('fs');
 
 const server = new http.Server();
 
@@ -13,7 +12,7 @@ server.on('request', (req, res) => {
   switch (checkRequest (req)) {
     case 400:
       res.statusCode = 400;
-      res.end ('Bad request.');
+      res.end ('Bad request!');
       return;
     case 405:
       res.statusCode = 405;
@@ -28,7 +27,6 @@ server.on('request', (req, res) => {
   }
 
   fs.unlinkSync (filePath, (err) => {
-    console.log ('Can not delete the file.');
     res.statusCode = 500;
     res.end ('Internal error');
   });

@@ -33,6 +33,8 @@ server.on('request', (req, res) => {
   });
 
   const writeFile = fs.createWriteStream (filePath);
+  const limit = new limitSizeStream ({limit: 1000000});
+
   writeFile.on ('finish', () => {
     res.statusCode = 201;
     res.end ('Done.');
@@ -41,16 +43,13 @@ server.on('request', (req, res) => {
     res.statusCode = 500;
     res.end ('Internal error.');
   });
-
-  const limit = new limitSizeStream ({limit: 1000000});
-  limit.on ('error', (err) => {
-        
+  
+  limit.on ('error', (err) => {  
     writeFile.destroy ();
     fs.unlink (filePath, (err) => {});
     res.statusCode = 413;
     res.end ('File is too big.');
     req.destroy ();
-
   });
 
   req.pipe (limit).pipe (writeFile);
