@@ -46,7 +46,9 @@ var checkRequest = function (req, res) {
 
   // Проверка пути
   const pathName = url.parse (req.url).pathname.slice (1); // console.log ('pathName = ' + pathName);
-  if (!!path.parse (pathName).dir) {return 400;}
+  if (pathName.includes ('/')) {return 400;}
+  // 1. if (!!path.parse (pathName).dir) {return 400;}
+  // 2. if (pathName.indexOf ('/') !== -1) {return 400;}
 
 
   // Полный путь к файлу
