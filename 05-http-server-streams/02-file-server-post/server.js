@@ -44,12 +44,13 @@ server.on('request', (req, res) => {
     res.end ('Internal error.');
   });
   
-  limit.on ('error', (err) => {  
+  limit.on ('error', (err) => {
+    console.log ('Limit error occurred');
     writeFile.destroy ();
     fs.unlink (filePath, (err) => {});
     res.statusCode = 413;
     res.end ('File is too big.');
-    req.destroy ();
+    //req.destroy ();
     return;
   });
 
