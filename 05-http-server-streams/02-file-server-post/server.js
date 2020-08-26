@@ -45,10 +45,10 @@ server.on('request', (req, res) => {
   });
   
   limit.on ('error', (err) => {
-    writeFile.destroy ();
-    fs.unlink (filePath, (err) => {});
     res.statusCode = 413;
     res.end ('File is too big.');
+    writeFile.destroy ();
+    fs.unlink (filePath, (err) => {});
     return;
   });
 
