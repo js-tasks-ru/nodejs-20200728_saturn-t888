@@ -25,15 +25,16 @@ app.use (async (ctx, next) => {
 router.get ('/subscribe', async (ctx, next) => {
   const id = !!(url.parse (ctx.request.url).query) ? url.parse (ctx.request.url).query.slice (2) : Math.random ();
   subscribers[id] = null;
+  let interv = 0;
 
   await new Promise ((resolve) => {
-    setInterval (() => {
+    interv = setInterval (() => {
       if (subscribers[id] !== null) {
         resolve (subscribers[id]);
       }
     }, 200);
   }).then(() => {
-    clearInterval ();
+    clearInterval (interv);
   });
 
   ctx.response.status = 200;
