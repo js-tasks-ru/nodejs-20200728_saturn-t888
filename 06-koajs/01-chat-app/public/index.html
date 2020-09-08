@@ -35,6 +35,7 @@
     const xhr = new XMLHttpRequest();
 
     xhr.open("GET", "/subscribe?r=" + Math.random(), true);
+    //xhr.open("GET", "/subscribe", true);//
 
     xhr.onload = function() {
       if(xhr.status != 200) return this.onerror();
