@@ -65,11 +65,7 @@ router.use(async (ctx, next) => {
 
   const session = await Session.findOne ({token: token}).populate ('user');
   if (!session) {
-    const err = new Error ();
-    err.status = 401;
-    err.message = 'Неверный аутентификационный токен';
-
-    throw err;
+    ctx.throw (401, 'Неверный аутентификационный токен'); // Учёл замечание :) //
   } else {
     await session.update ({lastVisit: new Date () });
     ctx.user = session.user;
